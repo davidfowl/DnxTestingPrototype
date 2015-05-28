@@ -66,5 +66,10 @@ namespace ClassLibrary31
 
             return $"dnx-{flavor}-{os}-{architecture}";
         }
+
+        public override string ToString()
+        {
+            return Path;
+        }
     }
 }

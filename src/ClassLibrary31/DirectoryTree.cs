@@ -88,6 +88,7 @@ namespace ClassLibrary31
             parent[directoryInfo.Name] = directory;
         }
 
+        // TODO: DiffResult
         public DirectoryTree Diff(DirectoryTree other)
         {
             var nodes1 = Flatten().OrderBy(n => n.Key).ToList();
@@ -101,6 +102,11 @@ namespace ClassLibrary31
                 return keysEqual && valuesEqual;
             })
             .All(a => a);
+
+            Directory<string, List<string>>
+                "extra" -> 
+                missing -> list
+                modified -> listkkk
 
             return null;
         }

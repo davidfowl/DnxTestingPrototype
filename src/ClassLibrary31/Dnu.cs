@@ -47,6 +47,24 @@ namespace ClassLibrary31
             }
         }
 
+        public string Build(string projectPath, string outputPath, string configuration = "Debug")
+        {
+            var sb = new StringBuilder();
+            sb.Append("build ");
+            sb.Append($@"""{projectPath}""");
+            sb.Append($@" --out ""{outputPath}""");
+            sb.Append($" --configuration {configuration}");
+
+            int exitCode = Execute(sb.ToString());
+
+            if (exitCode != 0)
+            {
+                throw new InvalidOperationException($"Build failed! Exit code was {exitCode}");
+            }
+
+            return Path.Combine(outputPath, configuration);
+        }
+
         public int Execute(string commandLine)
         {
             string stdOut;
