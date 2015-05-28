@@ -103,11 +103,6 @@ namespace ClassLibrary31
             })
             .All(a => a);
 
-            Directory<string, List<string>>
-                "extra" -> 
-                missing -> list
-                modified -> listkkk
-
             return null;
         }
 

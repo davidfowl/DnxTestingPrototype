@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Framework.Runtime;
 
 namespace ClassLibrary31
 {
@@ -14,9 +15,16 @@ namespace ClassLibrary31
             string commandLine,
             out string stdOut,
             out string stdErr,
-            IDictionary<string, string> environment = null,
+            Action<Dictionary<string, string>> envSetup = null,
             string workingDir = null)
         {
+            Dictionary<string, string> env = null;
+            if (envSetup != null)
+            {
+                env = new Dictionary<string, string>();
+                envSetup(env);
+            }
+
             var processStartInfo = new ProcessStartInfo()
             {
                 UseShellExecute = false,
@@ -27,9 +35,9 @@ namespace ClassLibrary31
                 RedirectStandardError = true
             };
 
-            if (environment != null)
+            if (env != null)
             {
-                foreach (var pair in environment)
+                foreach (var pair in env)
                 {
 #if DNX451
                     processStartInfo.EnvironmentVariables[pair.Key] = pair.Value;

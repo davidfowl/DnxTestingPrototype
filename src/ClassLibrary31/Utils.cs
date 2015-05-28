@@ -11,7 +11,8 @@ namespace ClassLibrary31
     {
         public static Solution GetSolution(string solutionName, bool shared = false)
         {
-            var originalSolutionPath = Path.Combine(Path.Combine("solutions", solutionName));
+            var rootPath = ProjectResolver.ResolveRootDirectory(Directory.GetCurrentDirectory());
+            var originalSolutionPath = Path.Combine(Path.Combine(rootPath, "solutions", solutionName));
             if (shared)
             {
                 return new Solution(originalSolutionPath);
@@ -32,7 +33,7 @@ namespace ClassLibrary31
                 basePath = Path.Combine(rootPath, "artifacts");
             }
 
-            var tempFolderPath = Path.Combine(basePath, Path.GetTempFileName());
+            var tempFolderPath = Path.Combine(basePath, Path.GetRandomFileName());
             Directory.CreateDirectory(tempFolderPath);
             return tempFolderPath;
         }

@@ -12,27 +12,26 @@ namespace ClassLibrary4
         [MemberData(nameof(DnxSdks))]
         public void BootstrapperInvokesAssemblyWithInferredAppBaseAndLibPath(DnxSdk sdk)
         {
-            // TODO: Solution class: solution.OutputFolder, solution.MainProject
             var outputFolder = sdk.Flavor == "coreclr" ? "dnxcore50" : "dnx451";
             var solution = Utils.GetSolution("SimpleConsoleApp", shared: false);
             var projectPath = solution.GetProjectPath("SimpleConsoleApp");
             var buildOutputPath = solution.ArtifactsPath;
 
             sdk.Dnu.Restore(projectPath);
-            var sdk.Dnu.Build(projectPath, buildOutputPath, configuration: "Release");
+            sdk.Dnu.Build(projectPath, buildOutputPath, configuration: "Release");
 
-            // TODO: output result as param, DNX_TRACE boolean, env less noisy
+            // TODO: output result as param???
+            string stdOut, stdErr;
             var exitCode = sdk.Dnx.Execute(
-                Path.Combine(outputFolder, "Release", outputFolder, "HelloWorld.dll"),
-                environment: env =>
-                {
-                    env[EnvironmentNames.Trace] = null;
-                });
+                Path.Combine(buildOutputPath, "Release", outputFolder, "SimpleConsoleApp.dll"),
+                out stdOut,
+                out stdErr,
+                dnxTraceOn: false);
 
             Assert.Equal(0, exitCode);
             Assert.Equal(@"Hello World!
-Hello, code!
 ", stdOut);
+            Assert.True(string.IsNullOrEmpty(stdErr));
         }
     }
 }
