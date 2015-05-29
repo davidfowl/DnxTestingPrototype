@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Framework.Runtime;
+using Newtonsoft.Json.Linq;
 
 namespace Utils
 {
@@ -56,7 +57,13 @@ namespace Utils
                 var folderName = new DirectoryInfo(folderPath).Name;
                 CopyFolder(folderPath, Path.Combine(targetFolder, folderName));
             }
+        }
 
+        public static void UpdateJson(string path, Action<JObject> action)
+        {
+            var json = JObject.Parse(File.ReadAllText(path));
+            action(json);
+            File.WriteAllText(path, json.ToString());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.Framework.Runtime;
+using NuGet;
 
 namespace Utils
 {
@@ -10,6 +11,22 @@ namespace Utils
         public Proj(Project project)
         {
             _project = project;
+        }
+
+        public string Name
+        {
+            get
+            {
+                return _project.Name;
+            }
+        }
+
+        public SemanticVersion Version
+        {
+            get
+            {
+                return _project.Version;
+            }
         }
 
         public string ProjectDirectory
