@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Framework.Runtime;
 
-namespace ClassLibrary31
+namespace Utils
 {
     public class Exec
     {
@@ -18,12 +18,8 @@ namespace ClassLibrary31
             Action<Dictionary<string, string>> envSetup = null,
             string workingDir = null)
         {
-            Dictionary<string, string> env = null;
-            if (envSetup != null)
-            {
-                env = new Dictionary<string, string>();
-                envSetup(env);
-            }
+            var env = new Dictionary<string, string>();
+            envSetup?.Invoke(env);
 
             var processStartInfo = new ProcessStartInfo()
             {
@@ -35,16 +31,13 @@ namespace ClassLibrary31
                 RedirectStandardError = true
             };
 
-            if (env != null)
+            foreach (var pair in env)
             {
-                foreach (var pair in env)
-                {
 #if DNX451
-                    processStartInfo.EnvironmentVariables[pair.Key] = pair.Value;
+                processStartInfo.EnvironmentVariables[pair.Key] = pair.Value;
 #else
-                    processStartInfo.Environment.Add(pair);
+                processStartInfo.Environment.Add(pair);
 #endif
-                }
             }
 
             var process = Process.Start(processStartInfo);

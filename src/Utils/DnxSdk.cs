@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ClassLibrary31
+namespace Utils
 {
     public class DnxSdk
     {

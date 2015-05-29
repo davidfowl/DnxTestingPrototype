@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json.Linq;
 
-namespace ClassLibrary31
+namespace Utils
 {
     public class Program
     {
@@ -15,9 +15,9 @@ namespace ClassLibrary31
         {
             var solution = CreateSolution();
 
-            solution["src"] = new DirectoryTree
+            solution["src"] = new Dir
             {
-                ["P1"] = new DirectoryTree
+                ["P1"] = new Dir
                 {
                     ["Foo.cs"] = "This should be a compilation error",
                     ["project.json"] = new JObject
@@ -52,9 +52,9 @@ namespace ClassLibrary31
         {
             var solution = CreateSolution();
 
-            solution["src"] = new DirectoryTree
+            solution["src"] = new Dir
             {
-                ["P1"] = new DirectoryTree
+                ["P1"] = new Dir
                 {
                     ["project.json"] = new JObject
                     {
@@ -69,7 +69,7 @@ namespace ClassLibrary31
                         }
                     }
                 },
-                ["P2"] = new DirectoryTree
+                ["P2"] = new Dir
                 {
                     ["project.json"] = new JObject
                     {
@@ -107,9 +107,9 @@ namespace ClassLibrary31
 
         private static void BuildPackages()
         {
-            var tree = new DirectoryTree
+            var tree = new Dir
             {
-                ["MyPackage1"] = new DirectoryTree
+                ["MyPackage1"] = new Dir
                 {
                     ["project.json"] = new JObject
                     {
@@ -119,19 +119,19 @@ namespace ClassLibrary31
             };
         }
 
-        private static DirectoryTree Expected()
+        private static Dir Expected()
         {
-            return new DirectoryTree
+            return new Dir
             {
-                ["approot"] = new DirectoryTree
+                ["approot"] = new Dir
                 {
                     ["global.json"] = new JObject
                     {
                         ["packages"] = "packages"
                     },
-                    ["src"] = new DirectoryTree
+                    ["src"] = new Dir
                     {
-                        ["P1"] = new DirectoryTree
+                        ["P1"] = new Dir
                         {
                             ["project.json", "project.lock.json"] = ""
                         }
@@ -145,9 +145,9 @@ namespace ClassLibrary31
             return Path.Combine(@"C:\published_things", scenario);
         }
 
-        private static DirectoryTree CreateSolution()
+        private static Dir CreateSolution()
         {
-            var solution = new DirectoryTree
+            var solution = new Dir
             {
                 ["global.json"] = new JObject
                 {

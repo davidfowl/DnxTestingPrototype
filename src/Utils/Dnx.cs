@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Framework.Runtime;
 
-namespace ClassLibrary31
+namespace Utils
 {
     public class Dnx
     {

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Framework.Runtime;
 
-namespace ClassLibrary31
+namespace Utils
 {
-    public static class Utils
+    public static class TestUtils
     {
         public static Solution GetSolution(string solutionName, bool shared = false)
         {

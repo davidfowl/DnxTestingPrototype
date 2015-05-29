@@ -4,18 +4,25 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace ClassLibrary31
+namespace Utils
 {
-    public class DirectoryTree
+    public class Dir
     {
         private readonly Dictionary<string, object> _nodes = new Dictionary<string, object>();
+        public const string EmptyFile = "";
+        public string LoadPath { get; private set; } = "In Memory";
 
-        public DirectoryTree()
+        public Dir(string rootPath): this()
+        {
+            Load(rootPath);
+        }
+
+        public Dir()
         {
             ReadFile = fileInfo => File.ReadAllText(fileInfo.FullName);
         }
 
-        public DirectoryTree(DirectoryTree parent)
+        public Dir(Dir parent)
         {
             ReadFile = parent.ReadFile;
         }
@@ -43,9 +50,18 @@ namespace ClassLibrary31
 
         public void Load(string path)
         {
+            LoadPath = path;
             var directory = new DirectoryInfo(path);
 
-            Read(this, directory);
+            foreach (var subDirectoryInfo in directory.EnumerateDirectories())
+            {
+                Read(this, subDirectoryInfo);
+            }
+
+            foreach (var file in directory.EnumerateFiles())
+            {
+                this[file.Name] = ReadFile(file);
+            }
         }
 
         public void Save(string path)
@@ -55,7 +71,7 @@ namespace ClassLibrary31
 
         private void Write(string path, object value)
         {
-            var tree = value as DirectoryTree;
+            var tree = value as Dir;
             if (tree != null)
             {
                 Directory.CreateDirectory(path);
@@ -71,9 +87,9 @@ namespace ClassLibrary31
             }
         }
 
-        private static void Read(DirectoryTree parent, DirectoryInfo directoryInfo)
+        private static void Read(Dir parent, DirectoryInfo directoryInfo)
         {
-            var directory = new DirectoryTree(parent);
+            var directory = new Dir(parent);
 
             foreach (var subDirectoryInfo in directoryInfo.EnumerateDirectories())
             {
@@ -88,28 +104,24 @@ namespace ClassLibrary31
             parent[directoryInfo.Name] = directory;
         }
 
-        // TODO: DiffResult
-        public DirectoryTree Diff(DirectoryTree other)
+        public DirDiff Diff(Dir other)
         {
-            var nodes1 = Flatten().OrderBy(n => n.Key).ToList();
-            var nodes2 = other.Flatten().OrderBy(n => n.Key).ToList();
+            var nodes1 = Flatten().ToDictionary(pair => pair.Key, pair => pair.Value);
+            var nodes2 = other.Flatten().ToDictionary(pair => pair.Key, pair => pair.Value);
 
-            nodes1.Zip(nodes2, (p1, p2) =>
+            return new DirDiff
             {
-                var keysEqual = object.Equals(p1.Key, p2.Key);
-                var valuesEqual = object.Equals(p1.Value, p2.Value);
-
-                return keysEqual && valuesEqual;
-            })
-            .All(a => a);
-
-            return null;
+                ExtraEntries = nodes1.Keys.Except(nodes2.Keys),
+                MissingEntries = nodes2.Keys.Except(nodes1.Keys),
+                DifferentEntries = nodes1.Keys.Intersect(nodes2.Keys)
+                    .Where(entry => !string.Equals(nodes1[entry].ToString(), nodes2[entry].ToString(), StringComparison.Ordinal))
+            };
         }
 
         public IEnumerable<KeyValuePair<string, object>> Flatten()
         {
             var allNodes = new Dictionary<string, object>();
-            var stack = new Stack<Tuple<string, DirectoryTree>>();
+            var stack = new Stack<Tuple<string, Dir>>();
             stack.Push(Tuple.Create("", this));
 
             while (stack.Count > 0)
@@ -120,14 +132,14 @@ namespace ClassLibrary31
 
                 foreach (var node in tree.Nodes)
                 {
-                    var subTree = node.Value as DirectoryTree;
+                    var subTree = node.Value as Dir;
+                    var subPath = string.IsNullOrEmpty(basePath) ? node.Key : $"{basePath}/{node.Key}";
                     if (subTree == null)
                     {
-                        allNodes[node.Key] = node.Value;
+                        allNodes[subPath] = node.Value;
                     }
                     else
                     {
-                        var subPath = string.IsNullOrEmpty(basePath) ? node.Key : $"{basePath}/{node.Key}";
                         stack.Push(Tuple.Create(subPath, subTree));
                     }
                 }

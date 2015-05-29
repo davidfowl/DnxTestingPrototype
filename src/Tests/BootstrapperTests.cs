@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ClassLibrary31;
+using Utils;
 using Xunit;
 
-namespace ClassLibrary4
+namespace Tests
 {
     public class BootstrapperTests : DnxSdkFunctionalTestBase
     {
@@ -13,7 +13,7 @@ namespace ClassLibrary4
         public void BootstrapperInvokesAssemblyWithInferredAppBaseAndLibPath(DnxSdk sdk)
         {
             var outputFolder = sdk.Flavor == "coreclr" ? "dnxcore50" : "dnx451";
-            var solution = Utils.GetSolution("SimpleConsoleApp", shared: false);
+            var solution = TestUtils.GetSolution("SimpleConsoleApp", shared: false);
             var projectPath = solution.GetProjectPath("SimpleConsoleApp");
             var buildOutputPath = solution.ArtifactsPath;
 

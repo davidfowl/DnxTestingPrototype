@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
-namespace ClassLibrary31
+namespace Utils
 {
     public class Dnu
     {
@@ -72,10 +73,10 @@ namespace ClassLibrary31
             return Execute(commandLine, out stdOut, out stdErr);
         }
 
-        public int Execute(string commandLine, out string stdOut, out string stdErr)
+        public int Execute(string commandLine, out string stdOut, out string stdErr, Action<Dictionary<string, string>> envSetup = null)
         {
             var dnxPath = Path.Combine(_sdkPath, "bin", "dnu.cmd");
-            return Exec.Run(dnxPath, commandLine, out stdOut, out stdErr);
+            return Exec.Run(dnxPath, commandLine, out stdOut, out stdErr, envSetup);
         }
     }
 }
