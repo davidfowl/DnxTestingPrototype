@@ -17,8 +17,8 @@ namespace Tests
             var projectPath = solution.GetProjectPath("SimpleConsoleApp");
             var buildOutputPath = solution.ArtifactsPath;
 
-            sdk.Dnu.Restore(projectPath);
-            sdk.Dnu.Build(projectPath, buildOutputPath, configuration: "Release");
+            sdk.Dnu.RestoreAndCheckExitCode(projectPath);
+            sdk.Dnu.BuildAndCheckExitCode(projectPath, buildOutputPath, configuration: "Release");
 
             // TODO: output result as param???
             string stdOut, stdErr;
@@ -31,7 +31,7 @@ namespace Tests
             Assert.Equal(0, exitCode);
             Assert.Equal(@"Hello World!
 ", stdOut);
-            Assert.True(string.IsNullOrEmpty(stdErr));
+            Assert.Empty(stdErr);
         }
     }
 }

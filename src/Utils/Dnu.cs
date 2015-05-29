@@ -14,7 +14,14 @@ namespace Utils
             _sdkPath = sdkPath;
         }
 
-        public void Publish(string projectPath, string outputPath, bool noSource = false)
+        public int Publish(
+            string projectPath,
+            string outputPath,
+            out string stdOut,
+            out string stdErr,
+            bool noSource = false,
+            string additionalArguments = null,
+            Action<Dictionary<string, string>> envSetup = null)
         {
             var sb = new StringBuilder();
             sb.Append("publish ");
@@ -25,8 +32,19 @@ namespace Utils
             }
 
             sb.Append($@" --out ""{outputPath}""");
+            sb.Append($" {additionalArguments}");
 
-            int exitCode = Execute(sb.ToString());
+            return Execute(sb.ToString(), out stdOut, out stdErr, envSetup);
+        }
+
+        public void PublishAndCheckExitCode(
+            string projectPath,
+            string outputPath,
+            bool noSource = false,
+            Action<Dictionary<string, string>> envSetup = null)
+        {
+            string stdOut, stdErr;
+            int exitCode = Publish(projectPath, outputPath, out stdOut, out stdErr, noSource, envSetup: envSetup);
 
             if (exitCode != 0)
             {
@@ -34,7 +52,7 @@ namespace Utils
             }
         }
 
-        public void Restore(string projectPath)
+        public void RestoreAndCheckExitCode(string projectPath)
         {
             var sb = new StringBuilder();
             sb.Append("restore ");
@@ -48,7 +66,7 @@ namespace Utils
             }
         }
 
-        public string Build(string projectPath, string outputPath, string configuration = "Debug")
+        public void BuildAndCheckExitCode(string projectPath, string outputPath, string configuration = "Debug")
         {
             var sb = new StringBuilder();
             sb.Append("build ");
@@ -62,8 +80,6 @@ namespace Utils
             {
                 throw new InvalidOperationException($"Build failed! Exit code was {exitCode}");
             }
-
-            return Path.Combine(outputPath, configuration);
         }
 
         public int Execute(string commandLine)
