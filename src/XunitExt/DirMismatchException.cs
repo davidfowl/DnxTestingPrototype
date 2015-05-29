@@ -17,6 +17,8 @@ Difference information:
 Extra: {string.Join(", ", diff.ExtraEntries)}
 Missing: {string.Join(", ", diff.MissingEntries)}
 Different: {string.Join(", ", diff.DifferentEntries)}";
+
+            // TODO: show what Assert.Equal(string, string) shows for the first entry in diff.DifferentEntries
         }
 
         public override string Message { get; }

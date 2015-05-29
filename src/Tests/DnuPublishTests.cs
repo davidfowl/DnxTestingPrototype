@@ -4,6 +4,7 @@ using Utils;
 using Xunit;
 using Microsoft.Framework.Runtime;
 using Microsoft.Framework.PackageManager;
+using Microsoft.Framework.PackageManager.Publish;
 using Newtonsoft.Json.Linq;
 using XunitExt;
 
@@ -182,13 +183,16 @@ namespace Tests
         public void DnuPublishWebApp_SubfolderAsPublicFolder_WithRuntime_DirPlusFlatList(DnxSdk sdk)
         {
             const string projectName = "ProjectForTesting";
+            var targetFramework = DependencyContext.GetFrameworkNameForRuntime(sdk.FullName).FullName;
+
             var projectJson = new JObject
             {
                 ["publishExclude"] = "**.useless",
                 ["webroot"] = "public",
                 ["frameworks"] = new JObject
                 {
-                    ["dnx451"] = new JObject { }
+                    ["dnx451"] = new JObject { },
+                    ["dnxcore50"] = new JObject { }
                 }
             };
 
@@ -221,7 +225,8 @@ namespace Tests
                 ["webroot"] = "../../../wwwroot",
                 ["frameworks"] = new JObject
                 {
-                    ["dnx451"] = new JObject { }
+                    ["dnx451"] = new JObject { },
+                    ["dnxcore50"] = new JObject { }
                 }
             };
 
@@ -237,13 +242,14 @@ namespace Tests
                 ["version"] = LockFileFormat.Version,
                 ["targets"] = new JObject
                 {
-                    ["DNX,Version=v4.5.1"] = new JObject { }
+                    [targetFramework] = new JObject { },
                 },
                 ["libraries"] = new JObject { },
                 ["projectFileDependencyGroups"] = new JObject
                 {
                     [""] = new JArray(),
-                    ["DNX,Version=v4.5.1"] = new JArray()
+                    ["DNX,Version=v4.5.1"] = new JArray(),
+                    ["DNXCore,Version=v5.0"] = new JArray()
                 }
             };
 
@@ -252,8 +258,8 @@ namespace Tests
   <appSettings>
     <add key=""{Constants.WebConfigBootstrapperVersion}"" value="""" />
     <add key=""{Constants.WebConfigRuntimePath}"" value=""..\approot\runtimes"" />
-    <add key=""{Constants.WebConfigRuntimeVersion}"" value="""" />
-    <add key=""{Constants.WebConfigRuntimeFlavor}"" value="""" />
+    <add key=""{Constants.WebConfigRuntimeVersion}"" value=""{sdk.Version}"" />
+    <add key=""{Constants.WebConfigRuntimeFlavor}"" value=""{sdk.Flavor}"" />
     <add key=""{Constants.WebConfigRuntimeAppBase}"" value=""..\approot\src\{projectName}"" />
   </appSettings>
 </configuration>";
@@ -270,6 +276,11 @@ namespace Tests
                 ["approot"] = new Dir
                 {
                     ["global.json"] = expectedOutputGlobalJson,
+                    ["runtimes"] = new Dir
+                    {
+                        // We don't want to construct folder structure of a bundled runtime manually
+                        [sdk.FullName] = new Dir(sdk.Path)
+                    },
                     [$"src/{projectName}"] = new Dir
                     {
                         ["project.json"] = expectedOutputProjectJson,
@@ -299,7 +310,7 @@ namespace Tests
                 outputPath,
                 out stdOut,
                 out stdErr,
-                additionalArguments: "--wwwroot-out wwwroot",
+                additionalArguments: $"--wwwroot-out wwwroot --runtime {sdk.FullName}",
                 envSetup: env => env[EnvironmentNames.Packages] = "packages");
 
             var actualOutputStructure = new Dir(outputPath);

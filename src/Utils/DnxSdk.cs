@@ -17,6 +17,8 @@ namespace Utils
 
         public string Path { get; set; }
 
+        public string FullName { get; set; }
+
         public Dnu Dnu => new Dnu(Path);
 
         public Dnx Dnx => new Dnx(Path);
@@ -51,9 +53,11 @@ namespace Utils
 
         public static DnxSdk GetRuntime(string basePath, string version, string flavor, string os, string arch)
         {
+            var fullName = GetRuntimeName(flavor, os, arch) + $".{version}";
             return new DnxSdk
             {
-                Path = System.IO.Path.Combine(basePath, "runtimes", GetRuntimeName(flavor, os, arch) + $".{version}"),
+                FullName = fullName,
+                Path = System.IO.Path.Combine(basePath, "runtimes", fullName),
                 Architecture = arch,
                 Flavor = flavor,
                 OperationSystem = os,
