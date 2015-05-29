@@ -14,11 +14,11 @@ namespace Tests
         {
             var outputFolder = sdk.Flavor == "coreclr" ? "dnxcore50" : "dnx451";
             var solution = TestUtils.GetSolution("SimpleConsoleApp", shared: false);
-            var projectPath = solution.GetProjectPath("SimpleConsoleApp");
-            var buildOutputPath = solution.ArtifactsPath;
+            var project = solution.GetProject("SimpleConsoleApp");
+            var buildOutputPath = project.BinPath;
 
-            sdk.Dnu.RestoreAndCheckExitCode(projectPath);
-            sdk.Dnu.BuildAndCheckExitCode(projectPath, buildOutputPath, configuration: "Release");
+            sdk.Dnu.RestoreAndCheckExitCode(project.ProjectDirectory);
+            sdk.Dnu.BuildAndCheckExitCode(project.ProjectDirectory, buildOutputPath, configuration: "Release");
 
             // TODO: output result as param???
             string stdOut, stdErr;
