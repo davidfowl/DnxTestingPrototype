@@ -83,6 +83,7 @@ namespace Utils
             }
             else
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, value?.ToString() ?? string.Empty);
             }
         }
