@@ -18,6 +18,7 @@ namespace Utils
             Action<Dictionary<string, string>> envSetup = null,
             string workingDir = null)
         {
+            Console.WriteLine($"Running: {program} {commandLine}");
             var env = new Dictionary<string, string>();
             envSetup?.Invoke(env);
 

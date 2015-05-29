@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using Microsoft.Framework.PackageManager.Publish;
 
 namespace Utils
 {
@@ -18,6 +20,8 @@ namespace Utils
         public string Path { get; set; }
 
         public string FullName { get; set; }
+
+        public FrameworkName TargetFramework { get; set; }
 
         public Dnu Dnu => new Dnu(Path);
 
@@ -57,6 +61,7 @@ namespace Utils
             return new DnxSdk
             {
                 FullName = fullName,
+                TargetFramework = DependencyContext.GetFrameworkNameForRuntime(fullName),
                 Path = System.IO.Path.Combine(basePath, "runtimes", fullName),
                 Architecture = arch,
                 Flavor = flavor,

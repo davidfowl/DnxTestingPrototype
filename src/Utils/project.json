@@ -13,6 +13,7 @@
   "dependencies": {
     "Microsoft.Framework.Runtime": "1.0.0-*",
     "Microsoft.Framework.Runtime.Sources": "1.0.0-*",
+    "Microsoft.Framework.PackageManager": "1.0.0-*",
     "Newtonsoft.Json": "7.0.1-beta3",
     "System.IO.FileSystem": "4.0.0-beta-22816",
     "System.Runtime.Extensions": "4.0.10-beta-22816",

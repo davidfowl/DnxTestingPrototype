@@ -37,6 +37,16 @@ namespace Utils
             return Execute(sb.ToString(), out stdOut, out stdErr, envSetup);
         }
 
+        public int PackagesAdd(
+            string packagePath,
+            string packagesDir,
+            out string stdOut,
+            out string stdErr,
+            Action<Dictionary<string, string>> envSetup = null)
+        {
+            return Execute($"packages add {packagePath} {packagesDir}", out stdOut, out stdErr, envSetup);
+        }
+
         public void PublishAndCheckExitCode(
             string projectPath,
             string outputPath,
@@ -66,10 +76,10 @@ namespace Utils
             }
         }
 
-        public void BuildAndCheckExitCode(string projectPath, string outputPath, string configuration = "Debug")
+        public DnuPackOutput PackAndCheckExitCode(string projectPath, string outputPath, string configuration = "Debug")
         {
             var sb = new StringBuilder();
-            sb.Append("build ");
+            sb.Append("pack ");
             sb.Append($@"""{projectPath}""");
             sb.Append($@" --out ""{outputPath}""");
             sb.Append($" --configuration {configuration}");
@@ -78,8 +88,11 @@ namespace Utils
 
             if (exitCode != 0)
             {
-                throw new InvalidOperationException($"Build failed! Exit code was {exitCode}");
+                throw new InvalidOperationException($"Pack failed! Exit code was {exitCode}");
             }
+
+            var projectName = new DirectoryInfo(projectPath).Name;
+            return new DnuPackOutput(outputPath, projectName, configuration);
         }
 
         public int Execute(string commandLine)

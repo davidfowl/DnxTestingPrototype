@@ -12,18 +12,18 @@ namespace Tests
         [MemberData(nameof(DnxSdks))]
         public void BootstrapperInvokesAssemblyWithInferredAppBaseAndLibPath(DnxSdk sdk)
         {
-            var outputFolder = sdk.Flavor == "coreclr" ? "dnxcore50" : "dnx451";
-            var solution = TestUtils.GetSolution("SimpleConsoleApp", shared: false);
-            var project = solution.GetProject("SimpleConsoleApp");
+            const string configuration = "Release";
+            const string appName = "SimpleConsoleApp";
+            var solution = TestUtils.GetSolution(appName, shared: false);
+            var project = solution.GetProject(appName);
             var buildOutputPath = project.BinPath;
 
             sdk.Dnu.RestoreAndCheckExitCode(project.ProjectDirectory);
-            sdk.Dnu.BuildAndCheckExitCode(project.ProjectDirectory, buildOutputPath, configuration: "Release");
+            var packOutput = sdk.Dnu.PackAndCheckExitCode(project.ProjectDirectory, buildOutputPath, configuration: configuration);
 
-            // TODO: output result as param???
             string stdOut, stdErr;
             var exitCode = sdk.Dnx.Execute(
-                Path.Combine(buildOutputPath, "Release", outputFolder, "SimpleConsoleApp.dll"),
+                packOutput.GetAssemblyPath(sdk.TargetFramework),
                 out stdOut,
                 out stdErr,
                 dnxTraceOn: false);
