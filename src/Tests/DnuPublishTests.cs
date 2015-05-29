@@ -13,7 +13,7 @@ namespace Tests
     {
         [Theory]
         [MemberData(nameof(DnxSdks))]
-        public void DnuPublishWebApp_SubfolderAsPublicFolder_WithRuntime_Dir(DnxSdk sdk)
+        public void DnuPublishWebApp_SubfolderAsPublicFolder_PureDir(DnxSdk sdk)
         {
             const string projectName = "ProjectForTesting";
             var projectJson = new JObject

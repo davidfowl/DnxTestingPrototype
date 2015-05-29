@@ -21,12 +21,7 @@ namespace Utils
 
         public Dnx Dnx => new Dnx(Path);
 
-        public static DnxSdk GetRuntime(string version)
-        {
-            return GetRuntime(version, "clr", "win", "x86");
-        }
-
-        public static DnxSdk GetRuntime(string version, string flavor, string os, string arch)
+        public static string GetRuntimeHome()
         {
             var homePath = Environment.ExpandEnvironmentVariables(Environment.GetEnvironmentVariable("DNX_HOME"));
 
@@ -41,7 +36,17 @@ namespace Utils
                 homePath = System.IO.Path.Combine(basePath, ".dnx");
             }
 
-            return GetRuntime(homePath, version, flavor, os, arch);
+            return homePath;
+        }
+
+        public static DnxSdk GetRuntime(string version)
+        {
+            return GetRuntime(version, "clr", "win", "x86");
+        }
+
+        public static DnxSdk GetRuntime(string version, string flavor, string os, string arch)
+        {
+            return GetRuntime(GetRuntimeHome(), version, flavor, os, arch);
         }
 
         public static DnxSdk GetRuntime(string basePath, string version, string flavor, string os, string arch)

@@ -9,6 +9,15 @@ namespace Tests
     {
         public const string SdkVersionForTestingEnvName = "DNX_SDK_VERSION_FOR_TESTING";
 
+        static DnxSdkFunctionalTestBase()
+        {
+            Console.WriteLine($@"
+Information of DNX under testing:
+  DNX Home: {DnxSdk.GetRuntimeHome()}
+  DNX Version: {SdkVersionForTesting}
+");
+        }
+
         public static string SdkVersionForTesting
         {
             get
