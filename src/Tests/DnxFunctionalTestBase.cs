@@ -12,6 +12,10 @@ namespace Tests
         static DnxSdkFunctionalTestBase()
         {
             Console.WriteLine($@"
+Environment information:
+  DNX_HOME: {Environment.GetEnvironmentVariable("DNX_HOME")}
+  DNX_SDK_VERSION_FOR_TESTING: {Environment.GetEnvironmentVariable("DNX_SDK_VERSION_FOR_TESTING")}
+
 Information of DNX under testing:
   DNX Home: {DnxSdk.GetRuntimeHome()}
   DNX Version: {SdkVersionForTesting}
