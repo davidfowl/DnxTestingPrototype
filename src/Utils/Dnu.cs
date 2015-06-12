@@ -47,6 +47,11 @@ namespace Utils
             return Execute($"packages add {packagePath} {packagesDir}", out stdOut, out stdErr, envSetup);
         }
 
+        public int Wrap(string csprojPath)
+        {
+            return Execute($"wrap {csprojPath}");
+        }
+
         public void PublishAndCheckExitCode(
             string projectPath,
             string outputPath,

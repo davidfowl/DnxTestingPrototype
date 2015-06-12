@@ -9,14 +9,20 @@ namespace Utils
 {
     public class Solution
     {
-        private readonly ProjectResolver _projectResolver;
         public Solution(string rootPath)
         {
             RootPath = rootPath;
-            _projectResolver = new ProjectResolver(rootPath);
         }
 
         public string RootPath { get; private set; }
+
+        public string GlobalFilePath
+        {
+            get
+            {
+                return Path.Combine(RootPath, GlobalSettings.GlobalFileName);
+            }
+        }
 
         public string ArtifactsPath
         {
@@ -42,14 +48,38 @@ namespace Utils
             }
         }
 
+        public string WrapFolderPath
+        {
+            get
+            {
+                return Path.Combine(RootPath, "wrap");
+            }
+        }
+
         public Proj GetProject(string name)
         {
             Project project;
-            if (!_projectResolver.TryResolveProject(name, out project))
+            var resolver = new ProjectResolver(RootPath);
+            if (!resolver.TryResolveProject(name, out project))
             {
                 throw new InvalidOperationException($"Unable to resolve project '{name}' from '{RootPath}'");
             }
             return new Proj(project);
+        }
+
+        public string GetWrapperProjectPath(string name)
+        {
+            var path = Path.Combine(WrapFolderPath, name, Project.ProjectFileName);
+            if (!Directory.Exists(path))
+            {
+                throw new InvalidOperationException($"Unable to find wrapper project {path}");
+            }
+            return path;
+        }
+
+        public string GetCsprojPath(string name)
+        {
+            return Path.Combine(RootPath, name, $"{name}.csproj");
         }
     }
 }

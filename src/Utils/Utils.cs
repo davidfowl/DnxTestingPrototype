@@ -10,6 +10,16 @@ namespace Utils
 {
     public static class TestUtils
     {
+        public static string NormalizeJson(string json)
+        {
+            return JObject.Parse(json).ToString();
+        }
+
+        public static string LoadNormalizedJson(string path)
+        {
+            return NormalizeJson(File.ReadAllText(path));
+        }
+
         public static Solution GetSolution(string solutionName, bool shared = false)
         {
             var rootPath = ProjectResolver.ResolveRootDirectory(Directory.GetCurrentDirectory());
