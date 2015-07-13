@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Framework.Runtime;
+using Newtonsoft.Json.Linq;
 
 namespace Utils
 {
@@ -15,6 +16,14 @@ namespace Utils
         }
 
         public string RootPath { get; private set; }
+
+        public IEnumerable<Proj> Projects
+        {
+            get
+            {
+                return ResolveAllProjects();
+            }
+        }
 
         public string GlobalFilePath
         {
@@ -80,6 +89,21 @@ namespace Utils
         public string GetCsprojPath(string name)
         {
             return Path.Combine(RootPath, name, $"{name}.csproj");
+        }
+
+        private IEnumerable<Proj> ResolveAllProjects()
+        {
+            var resolver = new ProjectResolver(RootPath);
+            var searchPaths = resolver.SearchPaths;
+            foreach (var path in searchPaths.Concat(searchPaths.SelectMany(p => Directory.EnumerateDirectories(p))))
+            {
+                Project project;
+                var name = new DirectoryInfo(path).Name;
+                if (resolver.TryResolveProject(name, out project))
+                {
+                    yield return new Proj(project);
+                }
+            }
         }
     }
 }

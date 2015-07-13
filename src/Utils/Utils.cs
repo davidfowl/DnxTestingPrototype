@@ -75,5 +75,21 @@ namespace Utils
             action(json);
             File.WriteAllText(path, json.ToString());
         }
+
+        public static string CreateLocalFeed(Solution solution)
+        {
+            var sdk = DnxSdkFunctionalTestBase.DnxSdks.First()[0] as DnxSdk;
+            var feed = GetLocalTempFolder();
+            var packOutput = GetLocalTempFolder();
+
+            sdk.Dnu.RestoreAndCheckExitCode(solution.RootPath);
+            foreach (var project in solution.Projects)
+            {
+                var output = sdk.Dnu.PackAndCheckExitCode(project.ProjectFilePath, packOutput);
+                sdk.Dnu.PackagesAddAndCheckExitCode(output.PackagePath, feed);
+            }
+
+            return feed;
+        }
     }
 }

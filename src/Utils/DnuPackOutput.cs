@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
-using Microsoft.Framework.Runtime;
 using NuGet;
 
 namespace Utils
@@ -15,11 +14,12 @@ namespace Utils
             PackageName = packageName;
             Configuration = configuration;
             var basePath = Path.Combine(RootPath, Configuration);
-            PackagePath = Directory.EnumerateFiles(basePath, $"*{NuGet.Constants.PackageExtension}")
-                .FirstOrDefault(x => !x.EndsWith($"*.symbols{NuGet.Constants.PackageExtension}"));
+            PackagePath = Directory.EnumerateFiles(basePath, $"*{Constants.PackageExtension}")
+                .Where(x => Path.GetFileName(x).StartsWith(packageName))
+                .FirstOrDefault(x => !x.EndsWith($"*.symbols{Constants.PackageExtension}"));
             if (string.IsNullOrEmpty(PackagePath))
             {
-                throw new InvalidOperationException($"Could not find NuGet package in '{outputPath}'");
+                throw new InvalidOperationException($"Could not find NuGet package in '{basePath}'");
             }
         }
 

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Utils;
 
-namespace Tests
+namespace Utils
 {
     public class DnxSdkFunctionalTestBase
     {

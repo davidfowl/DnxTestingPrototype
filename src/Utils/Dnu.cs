@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 
@@ -37,6 +38,34 @@ namespace Utils
             return Execute(sb.ToString(), out stdOut, out stdErr, envSetup);
         }
 
+        public int Restore(
+            string projectPath,
+            string packagesPath,
+            IEnumerable<string> feeds,
+            out string stdOut,
+            out string stdErr,
+            string additionalArguments = null,
+            Action<Dictionary<string, string>> envSetup = null)
+        {
+            var sb = new StringBuilder();
+            sb.Append("restore");
+            sb.Append($" \"{projectPath}\"");
+
+            if (!string.IsNullOrEmpty(packagesPath))
+            {
+                sb.Append($" --packages \"{packagesPath}\"");
+            }
+
+            if (feeds != null && feeds.Any())
+            {
+                sb.Append($" -s {string.Join(" -s ", feeds)}");
+            }
+
+            sb.Append($" {additionalArguments}");
+
+            return Execute(sb.ToString(), out stdOut, out stdErr, envSetup);
+        }
+
         public int PackagesAdd(
             string packagePath,
             string packagesDir,
@@ -69,11 +98,13 @@ namespace Utils
 
         public void RestoreAndCheckExitCode(string projectPath)
         {
-            var sb = new StringBuilder();
-            sb.Append("restore ");
-            sb.Append($@"""{projectPath}""");
-
-            int exitCode = Execute(sb.ToString());
+            string stdOut, stdErr;
+            var exitCode = Restore(
+                projectPath,
+                packagesPath: null,
+                feeds: null,
+                stdOut: out stdOut,
+                stdErr: out stdErr);
 
             if (exitCode != 0)
             {
@@ -96,8 +127,24 @@ namespace Utils
                 throw new InvalidOperationException($"Pack failed! Exit code was {exitCode}");
             }
 
-            var projectName = new DirectoryInfo(projectPath).Name;
-            return new DnuPackOutput(outputPath, projectName, configuration);
+            var projectDir = new DirectoryInfo(projectPath);
+            return new DnuPackOutput(
+                outputPath,
+                packageName: projectDir.Exists ? projectDir.Name: projectDir.Parent.Name,
+                configuration: configuration);
+        }
+
+        public void PackagesAddAndCheckExitCode(
+            string packagePath,
+            string packagesDir)
+        {
+            string stdOut, stdErr;
+            int exitCode = PackagesAdd(packagePath, packagesDir, out stdOut, out stdErr);
+
+            if (exitCode != 0)
+            {
+                throw new InvalidOperationException($"Packages installation failed! Exit code was {exitCode}");
+            }
         }
 
         public int Execute(string commandLine)
