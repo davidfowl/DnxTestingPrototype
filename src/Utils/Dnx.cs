@@ -16,14 +16,12 @@ namespace Utils
             _sdkPath = sdkPath;
         }
 
-        public int Execute(string commandLine, out string stdOut, out string stdErr, bool dnxTraceOn = true)
+        public ExecResult Execute(string commandLine, bool dnxTraceOn = true)
         {
             var dnxPath = Path.Combine(_sdkPath, "bin", "dnx");
             return Exec.Run(
                 dnxPath,
                 commandLine,
-                out stdOut,
-                out stdErr,
                 env => env[EnvironmentNames.Trace] = dnxTraceOn ? "1" : null);
         }
     }

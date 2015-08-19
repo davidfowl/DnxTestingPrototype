@@ -20,32 +20,36 @@ namespace Tests
             var packagePathResolver = new DefaultPackagePathResolver(solution.LocalPackagesDir);
             var nuspecPath = packagePathResolver.GetManifestFilePath(project.Name, project.Version);
 
-            sdk.Dnu.RestoreAndCheckExitCode(project.ProjectDirectory);
+            sdk.Dnu.Restore(project.ProjectDirectory).EnsureSuccess();
 
-            TestUtils.UpdateJson(project.ProjectFilePath, json => json["description"] = "Old");
-            var packOutput = sdk.Dnu.PackAndCheckExitCode(project.ProjectDirectory, project.BinPath, configuration: "Release");
-            string stdOut, stdErr;
-            var exitCode = sdk.Dnu.PackagesAdd(
+            project.Update(json => json["description"] = "Old");
+            var packOutput = sdk.Dnu.Pack(project.ProjectDirectory, project.BinPath, configuration: "Release");
+
+            packOutput.EnsureSuccess();
+
+            var result = sdk.Dnu.PackagesAdd(
                 packagePath: packOutput.PackagePath,
-                packagesDir: solution.LocalPackagesDir,
-                stdOut: out stdOut,
-                stdErr: out stdErr);
-            Assert.Equal(0, exitCode);
-            Assert.Empty(stdErr);
-            Assert.Contains($"Installing {project.Name}.{project.Version}", stdOut);
+                packagesDir: solution.LocalPackagesDir);
+            result.EnsureSuccess();
+            Assert.Empty(result.StandardError);
+            Assert.Contains($"Installing {project.Name}.{project.Version}", result.StandardOutput);
 
             var lastInstallTime = new FileInfo(nuspecPath).LastWriteTimeUtc;
 
-            TestUtils.UpdateJson(project.ProjectFilePath, json => json["description"] = "New");
-            packOutput = sdk.Dnu.PackAndCheckExitCode(project.ProjectDirectory, project.BinPath, configuration: "Release");
-            exitCode = sdk.Dnu.PackagesAdd(
+            // TestUtils.UpdateJson(project.ProjectFilePath, json => json["description"] = "New");
+            project.Update(json => json["description"] = "New");
+
+            packOutput = sdk.Dnu.Pack(project.ProjectDirectory, project.BinPath, configuration: "Release");
+
+            packOutput.EnsureSuccess();
+
+            result = sdk.Dnu.PackagesAdd(
                 packagePath: packOutput.PackagePath,
-                packagesDir: solution.LocalPackagesDir,
-                stdOut: out stdOut,
-                stdErr: out stdErr);
-            Assert.Equal(0, exitCode);
-            Assert.Empty(stdErr);
-            Assert.Contains($"Overwriting {project.Name}.{project.Version}", stdOut);
+                packagesDir: solution.LocalPackagesDir);
+
+            result.EnsureSuccess();
+            Assert.Empty(result.StandardError);
+            Assert.Contains($"Overwriting {project.Name}.{project.Version}", result.StandardOutput);
 
             var xDoc = XDocument.Load(packagePathResolver.GetManifestFilePath(project.Name, project.Version));
             var actualDescription = xDoc.Root.Descendants()

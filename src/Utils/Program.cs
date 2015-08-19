@@ -44,8 +44,8 @@ namespace Utils
 
             var sdk = DnxSdk.GetRuntime(version, flavor, os, arch);
 
-            sdk.Dnu.RestoreAndCheckExitCode(projectPath);
-            sdk.Dnu.PublishAndCheckExitCode(projectPath, publishOutput, noSource: true);
+            sdk.Dnu.Restore(projectPath).EnsureSuccess();
+            sdk.Dnu.Publish(projectPath, publishOutput, noSource: true);
         }
 
         public void Scenario2(string version, string flavor, string os, string arch)
@@ -101,8 +101,8 @@ namespace Utils
 
             var sdk = DnxSdk.GetRuntime(version, flavor, os, arch);
 
-            sdk.Dnu.RestoreAndCheckExitCode(projectPath);
-            sdk.Dnu.PublishAndCheckExitCode(projectPath, publishOutput, noSource: true);
+            sdk.Dnu.Restore(projectPath).EnsureSuccess();
+            sdk.Dnu.Publish(projectPath, publishOutput, noSource: true);
         }
 
         private static void BuildPackages()

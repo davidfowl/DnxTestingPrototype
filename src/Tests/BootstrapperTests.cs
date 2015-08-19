@@ -18,20 +18,17 @@ namespace Tests
             var project = solution.GetProject(appName);
             var buildOutputPath = project.BinPath;
 
-            sdk.Dnu.RestoreAndCheckExitCode(project.ProjectDirectory);
-            var packOutput = sdk.Dnu.PackAndCheckExitCode(project.ProjectDirectory, buildOutputPath, configuration: configuration);
+            sdk.Dnu.Restore(project.ProjectDirectory).EnsureSuccess();
+            var packOutput = sdk.Dnu.Pack(project.ProjectDirectory, buildOutputPath, configuration: configuration);
 
-            string stdOut, stdErr;
-            var exitCode = sdk.Dnx.Execute(
+            var result = sdk.Dnx.Execute(
                 packOutput.GetAssemblyPath(sdk.TargetFramework),
-                out stdOut,
-                out stdErr,
                 dnxTraceOn: false);
 
-            Assert.Equal(0, exitCode);
+            result.EnsureSuccess();
             Assert.Equal(@"Hello World!
-", stdOut);
-            Assert.Empty(stdErr);
+", result.StandardOutput);
+            Assert.Empty(result.StandardError);
         }
     }
 }

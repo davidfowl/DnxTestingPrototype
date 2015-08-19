@@ -6,7 +6,7 @@ using NuGet;
 
 namespace Utils
 {
-    public class DnuPackOutput
+    public class DnuPackOutput : ExecResult
     {
         public DnuPackOutput(string outputPath, string packageName, string configuration)
         {

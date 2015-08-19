@@ -63,14 +63,11 @@ namespace Tests
             var solution = TestUtils.GetSolution(solutionName, shared: false);
             var libraryBetaProject = solution.GetProject("LibraryBeta");
 
-            var exitCode = sdk.Dnu.Wrap(solution.GetCsprojPath("LibraryBeta.PCL"));
-            Assert.Equal(0, exitCode);
+            sdk.Dnu.Wrap(solution.GetCsprojPath("LibraryBeta.PCL")).EnsureSuccess();
 
-            exitCode = sdk.Dnu.Wrap(solution.GetCsprojPath("LibraryBeta.PCL.Desktop"));
-            Assert.Equal(0, exitCode);
+            sdk.Dnu.Wrap(solution.GetCsprojPath("LibraryBeta.PCL.Desktop")).EnsureSuccess();
 
-            exitCode = sdk.Dnu.Wrap(solution.GetCsprojPath("LibraryBeta.PCL.Phone"));
-            Assert.Equal(0, exitCode);
+            sdk.Dnu.Wrap(solution.GetCsprojPath("LibraryBeta.PCL.Phone")).EnsureSuccess();
 
             // DNX internal JSON writer doesn't follow the indentation convention followed by JSON.NET
             Assert.Equal(expectedGlobalJson.ToString(), TestUtils.LoadNormalizedJson(solution.GlobalFilePath));
@@ -150,8 +147,7 @@ namespace Tests
             const string solutionName = "DnuWrapTestProjects";
             var solution = TestUtils.GetSolution(solutionName, shared: false);
 
-            var exitCode = sdk.Dnu.Wrap(solution.GetCsprojPath("LibraryGamma"));
-            Assert.Equal(0, exitCode);
+            sdk.Dnu.Wrap(solution.GetCsprojPath("LibraryGamma")).EnsureSuccess();
 
             var libGammaProjectJson = solution.GetProject("LibraryGamma").ProjectFilePath;
             var libEpsilonProjectJson = solution.GetProject("LibraryEpsilon").ProjectFilePath;

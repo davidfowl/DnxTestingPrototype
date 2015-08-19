@@ -8,13 +8,28 @@ using Microsoft.Framework.Runtime;
 
 namespace Utils
 {
+    public class ExecResult
+    {
+        public int ExitCode { get; set; }
+        public string StandardOutput { get; set; }
+        public string StandardError { get; set; }
+
+        public ExecResult EnsureSuccess()
+        {
+            if (ExitCode != 0)
+            {
+                throw new InvalidOperationException($"Exit code was {ExitCode}");
+            }
+
+            return this;
+        }
+    }
+
     public class Exec
     {
-        public static int Run(
+        public static ExecResult Run(
             string program,
             string commandLine,
-            out string stdOut,
-            out string stdErr,
             Action<Dictionary<string, string>> envSetup = null,
             string workingDir = null)
         {
@@ -71,10 +86,14 @@ namespace Utils
             process.BeginErrorReadLine();
 
             process.WaitForExit();
-            stdOut = stdoutBuilder.ToString();
-            stdErr = stderrBuilder.ToString();
+            var result = new ExecResult()
+            {
+                StandardError = stderrBuilder.ToString(),
+                StandardOutput = stdoutBuilder.ToString(),
+                ExitCode = process.ExitCode
+            };
 
-            return process.ExitCode;
+            return result;
         }
     }
 }

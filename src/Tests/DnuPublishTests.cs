@@ -164,17 +164,14 @@ namespace Tests
             var outputPath = Path.Combine(basePath, "output");
             projectStructure.Save(projectPath);
 
-            string stdOut, stdErr;
-            var exitCode = sdk.Dnu.Execute(
+            var result = sdk.Dnu.Execute(
                 $"publish {projectPath} --out {outputPath} --wwwroot-out wwwroot",
-                out stdOut,
-                out stdErr,
                 env => env[EnvironmentNames.Packages] = "packages");
 
             var actualOutputStructure = new Dir(outputPath);
 
-            Assert.Equal(0, exitCode);
-            Assert.Empty(stdErr);
+            result.EnsureSuccess();
+            Assert.Empty(result.StandardError);
             DirAssert.Equal(expectedOutputStructure, actualOutputStructure);
         }
 
@@ -304,19 +301,16 @@ namespace Tests
             var outputPath = Path.Combine(basePath, "output");
             projectStructure.Save(projectPath);
 
-            string stdOut, stdErr;
-            var exitCode = sdk.Dnu.Publish(
+            var result = sdk.Dnu.Publish(
                 projectPath,
                 outputPath,
-                out stdOut,
-                out stdErr,
                 additionalArguments: $"--wwwroot-out wwwroot --runtime {sdk.FullName}",
                 envSetup: env => env[EnvironmentNames.Packages] = "packages");
 
             var actualOutputStructure = new Dir(outputPath);
 
-            Assert.Equal(0, exitCode);
-            Assert.Empty(stdErr);
+            result.EnsureSuccess();
+            Assert.Empty(result.StandardError);
             DirAssert.Equal(expectedOutputStructure, actualOutputStructure);
         }
     }
