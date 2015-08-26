@@ -20,8 +20,8 @@ namespace Microsoft.Dnx.Testing
 
             sdk.Dnu.Restore(project.ProjectDirectory).EnsureSuccess();
 
-            project.Update(json => json["description"] = "Old");
-            var packOutput = sdk.Dnu.Pack(project.ProjectDirectory, project.BinPath, configuration: "Release");
+            project.UpdateProjectFile(json => json["description"] = "Old");
+            var packOutput = sdk.Dnu.Pack(project.ProjectDirectory, project.GetBinPath(), configuration: "Release");
 
             packOutput.EnsureSuccess();
 
@@ -35,9 +35,9 @@ namespace Microsoft.Dnx.Testing
             var lastInstallTime = new FileInfo(nuspecPath).LastWriteTimeUtc;
 
             // TestUtils.UpdateJson(project.ProjectFilePath, json => json["description"] = "New");
-            project.Update(json => json["description"] = "New");
+            project.UpdateProjectFile(json => json["description"] = "New");
 
-            packOutput = sdk.Dnu.Pack(project.ProjectDirectory, project.BinPath, configuration: "Release");
+            packOutput = sdk.Dnu.Pack(project.ProjectDirectory, project.GetBinPath(), configuration: "Release");
 
             packOutput.EnsureSuccess();
 

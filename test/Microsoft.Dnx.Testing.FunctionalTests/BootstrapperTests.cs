@@ -12,7 +12,7 @@ namespace Microsoft.Dnx.Testing
             const string appName = "SimpleConsoleApp";
             var solution = TestUtils.GetSolution(appName, shared: false);
             var project = solution.GetProject(appName);
-            var buildOutputPath = project.BinPath;
+            var buildOutputPath = project.GetBinPath();
 
             sdk.Dnu.Restore(project.ProjectDirectory).EnsureSuccess();
             var packOutput = sdk.Dnu.Pack(project.ProjectDirectory, buildOutputPath, configuration: configuration);

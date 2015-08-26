@@ -16,7 +16,7 @@ namespace Microsoft.Dnx.Testing
 
         public string RootPath { get; private set; }
 
-        public IEnumerable<Proj> Projects
+        public IEnumerable<Runtime.Project> Projects
         {
             get
             {
@@ -64,7 +64,7 @@ namespace Microsoft.Dnx.Testing
             }
         }
 
-        public Proj GetProject(string name)
+        public Runtime.Project GetProject(string name)
         {
             Runtime.Project project;
             var resolver = new ProjectResolver(RootPath);
@@ -72,7 +72,7 @@ namespace Microsoft.Dnx.Testing
             {
                 throw new InvalidOperationException($"Unable to resolve project '{name}' from '{RootPath}'");
             }
-            return new Proj(project);
+            return project;
         }
 
         public string GetWrapperProjectPath(string name)
@@ -90,7 +90,7 @@ namespace Microsoft.Dnx.Testing
             return Path.Combine(RootPath, name, $"{name}.csproj");
         }
 
-        private IEnumerable<Proj> ResolveAllProjects()
+        private IEnumerable<Runtime.Project> ResolveAllProjects()
         {
             var resolver = new ProjectResolver(RootPath);
             var searchPaths = resolver.SearchPaths;
@@ -100,7 +100,7 @@ namespace Microsoft.Dnx.Testing
                 var name = new DirectoryInfo(path).Name;
                 if (resolver.TryResolveProject(name, out project))
                 {
-                    yield return new Proj(project);
+                    yield return project;
                 }
             }
         }
