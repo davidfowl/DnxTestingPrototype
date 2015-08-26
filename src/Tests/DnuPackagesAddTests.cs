@@ -4,7 +4,6 @@ using System.Linq;
 using Utils;
 using Xunit;
 using NuGet;
-using Microsoft.Framework.Runtime;
 
 namespace Tests
 {

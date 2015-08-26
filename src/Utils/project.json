@@ -11,26 +11,14 @@
   },
 
   "dependencies": {
-    "Microsoft.Framework.Runtime": "1.0.0-*",
-    "Microsoft.Framework.Runtime.Sources": "1.0.0-*",
-    "Microsoft.Framework.PackageManager": "1.0.0-*",
-    "Newtonsoft.Json": "7.0.1-beta3",
-    "System.IO.FileSystem": "4.0.0-beta-22816",
-    "System.Runtime.Extensions": "4.0.10-beta-22816",
-    "System.Diagnostics.Process": "4.0.0-beta-22816",
-    "System.Xml.XDocument": "4.0.10-beta-22816"
+    "Microsoft.Dnx.Runtime": "1.0.0-*",
+    "Microsoft.Dnx.Runtime.Sources": "1.0.0-*",
+    "Microsoft.Dnx.Tooling": "1.0.0-*",
+    "Newtonsoft.Json": "7.0.1-beta3"
   },
 
   "frameworks": {
     "dnx451": { },
-    "dnxcore50": {
-      "dependencies": {
-        "System.Console": "4.0.0-beta-22816",
-        "System.Collections": "4.0.10-beta-22816",
-        "System.Linq": "4.0.0-beta-22816",
-        "System.Threading": "4.0.10-beta-22816",
-        "Microsoft.CSharp": "4.0.0-beta-22816"
-      }
-    }
+    "dnxcore50": { }
   }
 }

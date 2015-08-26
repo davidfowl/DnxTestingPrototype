@@ -1,15 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Runtime.Versioning;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Microsoft.Framework.Runtime;
+using Microsoft.Dnx.Runtime;
+using Microsoft.Dnx.Runtime.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace Utils
 {
     public static class TestUtils
     {
+        public static FrameworkName GetFrameworkForRuntimeFlavor(string flavor)
+        {
+            if (string.Equals("clr", flavor, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals("mono", flavor, StringComparison.OrdinalIgnoreCase))
+            {
+                return FrameworkNameHelper.ParseFrameworkName("dnx451");
+            }
+            else if (string.Equals("coreclr", flavor, StringComparison.OrdinalIgnoreCase))
+            {
+                return FrameworkNameHelper.ParseFrameworkName("dnxcore50");
+            }
+
+            throw new InvalidOperationException($"Unknown runtime flavor '{flavor}'");
+        }
         public static string NormalizeJson(string json)
         {
             return JObject.Parse(json).ToString();
@@ -82,11 +96,12 @@ namespace Utils
             var feed = GetLocalTempFolder();
             var packOutput = GetLocalTempFolder();
 
-            sdk.Dnu.RestoreAndCheckExitCode(solution.RootPath);
+            sdk.Dnu.Restore(solution.RootPath).EnsureSuccess();
             foreach (var project in solution.Projects)
             {
-                var output = sdk.Dnu.PackAndCheckExitCode(project.ProjectFilePath, packOutput);
-                sdk.Dnu.PackagesAddAndCheckExitCode(output.PackagePath, feed);
+                var output = sdk.Dnu.Pack(project.ProjectDirectory, packOutput);
+                output.EnsureSuccess();
+                sdk.Dnu.PackagesAdd(output.PackagePath, feed).EnsureSuccess();
             }
 
             return feed;

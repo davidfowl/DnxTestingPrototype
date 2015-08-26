@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Framework.Runtime;
+﻿using System.IO;
+using Microsoft.Dnx.Runtime;
 
 namespace Utils
 {

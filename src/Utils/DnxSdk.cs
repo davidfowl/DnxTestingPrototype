@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Runtime.Versioning;
-using Microsoft.Framework.PackageManager.Publish;
+using Microsoft.Dnx.Runtime.Helpers;
 
 namespace Utils
 {
@@ -61,7 +58,7 @@ namespace Utils
             return new DnxSdk
             {
                 FullName = fullName,
-                TargetFramework = DependencyContext.GetFrameworkNameForRuntime(fullName),
+                TargetFramework = TestUtils.GetFrameworkForRuntimeFlavor(flavor),
                 Path = System.IO.Path.Combine(basePath, "runtimes", fullName),
                 Architecture = arch,
                 Flavor = flavor,

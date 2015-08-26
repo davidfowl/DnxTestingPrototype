@@ -1,9 +1,7 @@
 ﻿using System.IO;
-using System.Xml.Linq;
 using System.Linq;
 using Utils;
 using Xunit;
-using NuGet;
 
 namespace Tests
 {
@@ -24,18 +22,15 @@ namespace Tests
             var projectDir = Path.Combine(tempDir, project.Name);
             TestUtils.CopyFolder(project.ProjectDirectory, projectDir);
 
-            string stdOut, stdErr;
-            var exitCode = sdk.Dnu.Restore(
+            var result = sdk.Dnu.Restore(
                 projectDir,
                 packagesDir,
-                feeds: new string[] { localFeed },
-                stdOut: out stdOut,
-                stdErr: out stdErr);
+                feeds: new string[] { localFeed });
 
-            Assert.Equal(0, exitCode);
-            Assert.Empty(stdErr);
-            Assert.Contains($"Installing DependencyA.1.0.0", stdOut);
-            Assert.Contains($"Installing DependencyB.2.0.0", stdOut);
+            result.EnsureSuccess();
+            Assert.Empty(result.StandardError);
+            Assert.Contains($"Installing DependencyA.1.0.0", result.StandardOutput);
+            Assert.Contains($"Installing DependencyB.2.0.0", result.StandardOutput);
             Assert.Equal(2, Directory.EnumerateFileSystemEntries(packagesDir).Count());
             Assert.True(Directory.Exists(Path.Combine(packagesDir, "DependencyA", "1.0.0")));
             Assert.True(Directory.Exists(Path.Combine(packagesDir, "DependencyB", "2.0.0")));

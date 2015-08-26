@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Microsoft.Framework.Runtime;
+using Microsoft.Dnx.Runtime;
 using Newtonsoft.Json.Linq;
 using NuGet;
 

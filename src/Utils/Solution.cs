@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
-using Microsoft.Framework.Runtime;
-using Newtonsoft.Json.Linq;
+using Microsoft.Dnx.Runtime;
+using ProjectResolver = Microsoft.Dnx.Tooling.ProjectResolver;
 
 namespace Utils
 {
