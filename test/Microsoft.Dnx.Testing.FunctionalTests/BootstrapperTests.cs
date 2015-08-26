@@ -1,7 +1,6 @@
-﻿using Utils;
-using Xunit;
+﻿using Xunit;
 
-namespace Tests
+namespace Microsoft.Dnx.Testing
 {
     public class BootstrapperTests : DnxSdkFunctionalTestBase
     {

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Runtime.Versioning;
-using Microsoft.Dnx.Runtime.Helpers;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public class DnxSdk
     {

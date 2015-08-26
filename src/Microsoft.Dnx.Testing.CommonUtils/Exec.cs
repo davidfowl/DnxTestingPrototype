@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Microsoft.Dnx.Runtime;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public class ExecResult
     {

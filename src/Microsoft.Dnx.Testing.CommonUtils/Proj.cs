@@ -1,16 +1,15 @@
 ﻿using System;
 using System.IO;
-using Microsoft.Dnx.Runtime;
 using Newtonsoft.Json.Linq;
 using NuGet;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public class Proj
     {
-        private Project _project;
+        private Runtime.Project _project;
 
-        public Proj(Project project)
+        public Proj(Runtime.Project project)
         {
             _project = project;
         }
@@ -68,7 +67,7 @@ namespace Utils
             TestUtils.UpdateJson(ProjectFilePath, updateContents);
 
             // Reparse
-            Project.TryGetProject(ProjectFilePath, out _project);
+            Runtime.Project.TryGetProject(ProjectFilePath, out _project);
         }
     }
 }

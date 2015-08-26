@@ -1,11 +1,10 @@
 ﻿using System.IO;
 using System.Linq;
 using Microsoft.Dnx.Runtime;
-using Utils;
-using Xunit;
 using Newtonsoft.Json.Linq;
+using Xunit;
 
-namespace Tests
+namespace Microsoft.Dnx.Testing
 {
     public class DnuWrapTests : DnxSdkFunctionalTestBase
     {

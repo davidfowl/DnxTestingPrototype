@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Collections.Generic;
-using Microsoft.Dnx.Runtime;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public class Dnu
     {

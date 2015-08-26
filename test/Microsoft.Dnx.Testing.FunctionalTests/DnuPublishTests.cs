@@ -1,14 +1,12 @@
 ﻿using System.IO;
 using System.Runtime.Versioning;
-using Utils;
-using Xunit;
 using Microsoft.Dnx.Runtime;
 using Microsoft.Dnx.Runtime.Helpers;
 using Microsoft.Dnx.Tooling.Publish;
 using Newtonsoft.Json.Linq;
-using XunitExt;
+using Xunit;
 
-namespace Tests
+namespace Microsoft.Dnx.Testing
 {
     public class DnuPublishTests : DnxSdkFunctionalTestBase
     {

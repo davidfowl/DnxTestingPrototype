@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit.Sdk;
-using Utils;
-
-namespace XunitExt
+﻿namespace Microsoft.Dnx.Testing
 {
     public class DirAssert
     {

@@ -6,22 +6,20 @@
   "projectUrl": "",
   "licenseUrl": "",
 
+  "commands": {
+    "ClassLibrary31": "ClassLibrary31"
+  },
+
   "dependencies": {
-    "Microsoft.AspNet.Testing": "1.0.0-*",
     "Microsoft.Dnx.Runtime": "1.0.0-*",
     "Microsoft.Dnx.Runtime.Sources": "1.0.0-*",
     "Microsoft.Dnx.Tooling": "1.0.0-*",
-    "Utils": "1.0.0-*",
-    "xunit.runner.aspnet": "2.0.0-aspnet-*",
-    "XunitExt": "1.0.0-*"
+    "Newtonsoft.Json": "7.0.1-beta3",
+    "xunit.runner.aspnet": "2.0.0-aspnet-*"
   },
 
-  "frameworks" : {
-    "dnx451": { }
-  },
-
-  "commands": {
-    "test": "xunit.runner.aspnet"
+  "frameworks": {
+    "dnx451": { },
+    "dnxcore50": { }
   }
-
 }

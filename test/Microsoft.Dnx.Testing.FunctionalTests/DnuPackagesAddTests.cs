@@ -1,11 +1,10 @@
 ﻿using System.IO;
 using System.Xml.Linq;
 using System.Linq;
-using Utils;
-using Xunit;
 using NuGet;
+using Xunit;
 
-namespace Tests
+namespace Microsoft.Dnx.Testing
 {
     public class DnuPackagesAddTests : DnxSdkFunctionalTestBase
     {

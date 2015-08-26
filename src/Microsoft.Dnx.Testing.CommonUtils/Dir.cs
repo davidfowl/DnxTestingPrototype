@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public class Dir
     {

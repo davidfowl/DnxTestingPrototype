@@ -1,9 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
-using Utils;
 using Xunit;
 
-namespace Tests
+namespace Microsoft.Dnx.Testing
 {
     public class DnuRestoreTests : DnxSdkFunctionalTestBase
     {

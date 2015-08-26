@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Dnx.Runtime;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public class Dnx
     {

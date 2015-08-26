@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Runtime.Versioning;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using Microsoft.Dnx.Runtime;
 using Microsoft.Dnx.Runtime.Helpers;
 using Newtonsoft.Json.Linq;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public static class TestUtils
     {

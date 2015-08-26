@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Versioning;
 using NuGet;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public class DnuPackOutput : ExecResult
     {

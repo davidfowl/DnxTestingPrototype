@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Utils
+namespace Microsoft.Dnx.Testing
 {
     public class DnxSdkFunctionalTestBase
     {
